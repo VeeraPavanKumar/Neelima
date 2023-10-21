@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        td.highlighted {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <table id="table">
+        <thead>
+            <tr>
+                <th>name</th>
+                <th>age</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            <tr>
+                <td contenteditable="true">john</td>
+                <td contenteditable="true">23</td>
+            </tr>
+            <tr>
+                <td contenteditable="true">tony</td>
+                <td contenteditable="true">26</td>
+            </tr>
+        </tbody>
+    </table>
+    <button id="saveChangesBtn">Save Changes</button>
+    <button id="disableHighlightBtn">Disable Highlight</button>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+           
+            document.querySelectorAll("#table td").forEach(function(td) {
+                td.addEventListener("click", function() {
+                    if (td.classList.contains("highlighted")) {
+                        td.classList.remove("highlighted");
+                    } else {
+                        td.classList.add("highlighted");
+                    }
+                });
+            });
+
+           
+            document.getElementById("saveChangesBtn").addEventListener("click", function() {
+               
+                document.querySelectorAll("#table td").forEach(function(td) {
+                    if (td.classList.contains("highlighted")) {
+                        localStorage.setItem(td.textContent, "highlighted");
+                    } else {
+                        localStorage.removeItem(td.textContent);
+                    }
+                });
+            });
+
+           
+            document.getElementById("disableHighlightBtn").addEventListener("click", function() {
+              
+                document.querySelectorAll("#table td.highlighted").forEach(function(td) {
+                    td.classList.remove("highlighted");
+                });
+            });
+
+           
+            document.querySelectorAll("#table td").forEach(function(td) {
+                if (localStorage.getItem(td.textContent) === "highlighted") {
+                    td.classList.add("highlighted");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
