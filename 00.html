@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <table id="table">
+        <thead>
+            <tr>
+                <th>name</th>
+                <th>age</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            <tr>
+                <td contenteditable="true">john</td>
+                <td contenteditable="true">23</td>
+            </tr>
+            <tr>
+                <td contenteditable="true">tony</td>
+                <td contenteditable="true">26</td>
+            </tr>
+        </tbody>
+    </table>
+    <button id="saveChangesBtn">Save Changes</button>
+    <button id="disableHighlightBtn">Disable Highlight</button>
+    <label><input type="radio" name="color" value="yellow"> Yellow</label>
+    <label><input type="radio" name="color" value="blue"> Blue</label>
+    <label><input type="radio" name="color" value="red"> Red</label>
+   <script>
+    var highlightChanged = false; // Define the highlightChanged variable
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var style = document.createElement('style');
+        style.innerHTML = `
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th, td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+        `;
+        document.head.appendChild(style);
+
+        function toggleHighlight(td, color) {
+            if (td.classList.contains("highlighted")) {
+                td.classList.remove("highlighted");
+            } else {
+                td.classList.add("highlighted");
+                td.style.backgroundColor = color;
+                highlightChanged = true; // Set the flag when highlighting is changed
+            }
+        }
+
+        function handleHighlighting(color) {
+            document.querySelectorAll("#table td").forEach(function(td) {
+                td.addEventListener("mouseup", function() {
+                    toggleHighlight(td, color);
+                });
+            });
+        }
+
+        function saveHighlightingState() {
+            document.querySelectorAll("#table td").forEach(function(td) {
+                if (td.classList.contains("highlighted")) {
+                    var color = getHighlightColor(td);
+                    localStorage.setItem(td.textContent, color);
+                } else {
+                    localStorage.removeItem(td.textContent);
+                }
+            });
+        }
+
+        function restoreHighlighting() {
+            document.querySelectorAll("#table td").forEach(function(td) {
+                var color = localStorage.getItem(td.textContent);
+                if (color) {
+                    toggleHighlight(td, color);
+                }
+            });
+        }
+
+        function getHighlightColor(td) {
+            return window.getComputedStyle(td, null).getPropertyValue("background-color");
+        }
+
+        document.querySelectorAll('input[name="color"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                var selectedColor = document.querySelector('input[name="color"]:checked').value;
+                handleHighlighting(selectedColor);
+                saveHighlightingState();
+            });
+        });
+
+        document.getElementById("disableHighlightBtn").addEventListener("click", function() {
+            if (highlightChanged) {
+                document.querySelectorAll("#table td.highlighted").forEach(function(td) {
+                    td.classList.remove("highlighted");
+                    td.style.backgroundColor = '';
+                    saveHighlightingState();
+                });
+                highlightChanged = false; // Reset the flag
+            }
+        });
+
+        document.getElementById("saveChangesBtn").addEventListener("click", function() {
+            saveHighlightingState();
+            highlightChanged = false; // Reset the flag
+            document.getElementById("disableHighlightBtn").removeAttribute("disabled");
+        });
+
+        restoreHighlighting();
+    });
+</script>
+
+</body>
+</html>
