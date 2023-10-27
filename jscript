@@ -81,3 +81,47 @@
     </script>
     </body>
 </html>
+
+
+
+<!DOCTYPE html>
+<html>
+  
+  <body>
+      <table>
+  <tr>
+    <td id="cell1">Cell 1</td>
+    <td id="cell2">Cell 2</td>
+    <td id="cell3">Cell 3</td>
+  </tr>
+</table>
+
+      <script>
+      var cellColors = ["white", "green", "red"];
+var currentColorIndex = 0;
+
+// Function to change the color of the cell
+function changeCellColor(cellId) {
+  var cell = document.getElementById(cellId);
+  cell.style.backgroundColor = cellColors[currentColorIndex];
+  
+  // Increment the color index and loop back to the beginning if necessary
+  currentColorIndex = (currentColorIndex + 1) % cellColors.length;
+}
+
+// Add onclick event handlers to change the color of the cells
+document.getElementById("cell1").onclick = function() {
+  changeCellColor("cell1");
+};
+
+document.getElementById("cell2").onclick = function() {
+  changeCellColor("cell2");
+};
+
+document.getElementById("cell3").onclick = function() {
+  changeCellColor("cell3");
+};
+
+
+      </script>
+  </body>
