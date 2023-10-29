@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Model Values</title>
+</head>
+<body>
+    <div id="modelValues"></div>
+    <div id="model1Values"></div>
+    <script>
+      var data = [
+    { model: 'Model A' },
+    { model: 'Model B' },
+    { model: 'Model C' },
+    { model: 'Model D' },
+    { model: 'Model A' },
+    { model1: 'Model A' },
+    { model: 'Model A' },
+    { model: 'Model A' },
+    { model1: 'Model A' }
+];
+
+function displayUniqueValues() {
+    var modelValues = [];
+    var model1Values = [];
+
+    // Separate the data into "model" and "model1" arrays
+    data.forEach(function (item) {
+        if (item.model) {
+            modelValues.push(item.model);
+        } else if (item.model1) {
+            model1Values.push(item.model1);
+        }
+    });
+
+    // Remove duplicates and join the arrays into strings
+    var uniqueModelValues = Array.from(new Set(modelValues)).join(', ');
+    var uniqueModel1Values = Array.from(new Set(model1Values)).join(', ');
+
+    // Display the unique values in the respective HTML elements
+    document.getElementById('modelValues').textContent = 'Model Values: ' + uniqueModelValues;
+    document.getElementById('model1Values').textContent = 'Model1 Values: ' + uniqueModel1Values;
+}
+
+// Call the function to display the unique values
+displayUniqueValues();
+
+      
+      
+      
+      
+      
+      
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+another approach
+
+
+
+function getUniqueValues() {
+  var data = document.getElementById("data").textContent;
+  var lines = data.split("\n");
+  var modelValues = new Set();
+  var model1Values = new Set();
+
+  lines.forEach(line => {
+    if (line.includes("model:")) {
+      var value = line.split("'")[1];
+      modelValues.add(value);
+    } else if (line.includes("model1:")) {
+      var value = line.split("'")[1];
+      model1Values.add(value);
+    }
+  });
+
+  var modelValuesElement = document.getElementById("modelValues");
+  modelValuesElement.textContent = Array.from(modelValues).join(", ");
+
+  var model1ValuesElement = document.getElementById("model1Values");
+  model1ValuesElement.textContent = Array.from(model1Values).join(", ");
+}
+
+getUniqueValues();
