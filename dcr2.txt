@@ -1,0 +1,56 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+  public static Map<String, List<String>> CreateUniqueData(Context context,String[] args) throws Exception {
+
+
+System.out.println("Inside the method");
+
+  Page pgobject = new Page("pagename");
+pgobject.open(context);
+
+String strPagecontext = pgobject.getContexts(context);
+
+System.out.println("The strpagecontext  is" + strPagecontext);
+
+pgobject.close(context);
+
+String[] input = strPagecontext .split(",");
+
+
+        Map<String, List<String>> data = new HashMap();
+
+        for (String entry : input) {
+            String[] parts = entry.split(" = ");
+
+System.out.println("The array length   is " + parts.length);
+           
+                String key = parts[0];
+sysout(key);
+                String value = parts[1];
+syso(value);
+
+List<String> values = data.get(key);
+if(values == null){
+values = new arrayList();
+
+data.put(key, value);
+            }
+if(!values.contains(value){
+values.add(value);
+        }
+        
+    }
+syso(data);
+}
+
+catch(Exception E){
+E.printStackTrace();
+}
+return data;
+}
+
+   
