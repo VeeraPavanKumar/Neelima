@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Table Manipulation</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+</head>
+<body>
+
+<button id="addRowBtn">Add Row</button>
+<br><br>
+
+<table id="dataTable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Option</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Table rows will be dynamically added here -->
+    </tbody>
+</table>
+<br>
+<button id="submitBtn">Submit</button>
+
+<script>
+    $(document).ready(function() {
+        // Load saved data from localStorage
+        var savedData = JSON.parse(localStorage.getItem("tableData"));
+        if (savedData) {
+            $.each(savedData, function(index, item) {
+                $("#dataTable tbody").append(
+                    "<tr>" +
+                    "<td><input type='text' value='" + item.name + "'></td>" +
+                    "<td><select><option value='option1' " + (item.option === 'option1' ? 'selected' : '') + ">Option 1</option><option value='option2' " + (item.option === 'option2' ? 'selected' : '') + ">Option 2</option></select></td>" +
+                    "<td><button class='deleteRowBtn'>Delete</button></td>" +
+                    "</tr>"
+                );
+            });
+        }
+
+        // Add row button functionality
+        $("#addRowBtn").click(function() {
+            $("#dataTable tbody").append(
+                "<tr>" +
+                "<td><input type='text'></td>" +
+                "<td><select><option value='option1'>Option 1</option><option value='option2'>Option 2</option></select></td>" +
+                "<td><button class='deleteRowBtn'>Delete</button></td>" +
+                "</tr>"
+            );
+        });
+
+        // Delete row button functionality
+        $(document).on('click', '.deleteRowBtn', function() {
+            $(this).closest('tr').remove();
+            saveDataToLocalStorage();
+        });
+
+        // Submit button functionality
+        $("#submitBtn").click(function() {
+            var tableData = [];
+            $("#dataTable tbody tr").each(function() {
+                var rowData = {
+                    name: $(this).find("input").val(),
+                    option: $(this).find("select").val()
+                };
+                tableData.push(rowData);
+            });
+            console.log(JSON.stringify(tableData));
+            // Here you can perform actions with the collected JSON data, like sending it to a server
+        });
+
+        // Save table data to local storage
+        function saveDataToLocalStorage() {
+            var tableData = [];
+            $("#dataTable tbody tr").each(function() {
+                var rowData = {
+                    name: $(this).find("input").val(),
+                    option: $(this).find("select").val()
+                };
+                tableData.push(rowData);
+            });
+            localStorage.setItem("tableData", JSON.stringify(tableData));
+        }
+    });
+</script>
+
+</body>
+</html>
